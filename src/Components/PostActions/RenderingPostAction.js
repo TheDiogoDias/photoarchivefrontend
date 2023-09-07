@@ -20,8 +20,9 @@ class RenderingPostAction extends Component {
                 {(this.props.file != null && this.props.createPost == null) && (
                     <Box direction="row" gap="medium">
                         <Button label="Change Image" onClick={this.changeImage} />
-                        <Button label="Upload Image" onClick={this.uploadImage} />
-                        {}
+                        {(this.props.show) && (
+                            <Button label="Upload Image" onClick={this.uploadImage} />
+                        )}
                     </Box>
                 ) }
             </>

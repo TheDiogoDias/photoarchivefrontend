@@ -22,15 +22,15 @@ const Profile = () => {
     useEffect(() => {
         async function fetchData() {
 
-            const response = await axios.get(`http://localhost:8082/api/photos/profile/${authorId}`);
+            const response = await axios.get(`https://photoarchive-a1hr.onrender.com/api/photos/profile/${authorId}`);
 
             if(response){
                 const responseData = response.data;
 
                 for(let i = 0; i < responseData.length; i++ ){
                     if(responseData[i].author){
-                        const response = await axios.get(`http://localhost:8082/api/users/getName/${responseData[i].author}`);
-                        const responseProfile = await axios.get(`http://localhost:8082/api/photographers/getProfile/${responseData[i].author}`);
+                        const response = await axios.get(`https://photoarchive-a1hr.onrender.com/api/users/getName/${responseData[i].author}`);
+                        const responseProfile = await axios.get(`https://photoarchive-a1hr.onrender.com/api/photographers/getProfile/${responseData[i].author}`);
                         responseData[i].profileImg = responseProfile.data.ProfileImg;
                         responseData[i].authorId = responseData[i].author;
                         responseData[i].author = response.data.name;
@@ -39,6 +39,8 @@ const Profile = () => {
 
                 
             }
+
+            console.log(response.data[0].author);
 
             setData(response.data);
             
@@ -50,9 +52,9 @@ const Profile = () => {
             const fetchImage = async () => {
 
                 if(data.length != null){
-                    const responseProfile = await axios.get(`http://localhost:8082/api/photographers/getProfile/${data[0].authorId}`);
+                    const responseProfile = await axios.get(`https://photoarchive-a1hr.onrender.com/api/photographers/getProfile/${data[0].authorId}`);
                     setProfile(responseProfile);
-                    const responseImg = await fetch(`http://localhost:8082/api/photos/uploadsProfileImg/${data[0].profileImg}`);
+                    const responseImg = await fetch(`https://photoarchive-a1hr.onrender.com/api/photos/uploadsProfileImg/${data[0].profileImg}`);
                     const blob = await responseImg.blob();
                     setProfileImg(URL.createObjectURL(blob));
                 }
@@ -74,9 +76,9 @@ const Profile = () => {
                     <Image src={profileImg} width="100px" style={{borderRadius: "55px"}}/>
                 </Box>
                 <Box>
-                    {(profile != null) && (
+                    {(profile != null && data != null) && (
                         <>
-                        <Text>Name: {profile.data.User}</Text>
+                        <Text>Name: {data[0].author}</Text>
                         <Text>Age: {profile.data.Age}</Text>
                         <Text>Gear</Text>
                         <Text>Camera: {profile.data.Camera}</Text>
@@ -87,7 +89,7 @@ const Profile = () => {
                 </Box>
             </Box>
             
-            <Grid columns={['medium', 'medium', 'medium']} gap="small">
+            <Grid columns={['auto', 'auto', 'auto']} gap="small">
             {(data.length < 1)? (
                 <Box align="center" background="grey" pad="large" style={{borderRadius: "10px"}}>
                     <Text>

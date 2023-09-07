@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {Box, Card, CardHeader, CardBody, Text, Button, Image, Layer, DropButton} from "grommet";
+import {Box, Card, CardHeader, CardBody, Text, Button, Image, Layer, DropButton, Spinner} from "grommet";
 
 import { Location } from 'grommet-icons';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Cookies from 'js-cookie';
 
@@ -14,13 +14,14 @@ const PostCard = (props) => {
     const [profileImageUrl, setProfileImageUrl] = useState('');
     const [show, setShow] = useState();
     const [showDelete, setShowDelete] = useState();
+    const [showLoading, setShowLoading] = useState();
     
 
     useEffect(() => {
         const fetchImage = async () => {
             const internetSpeed = Cookies.get('internetSpeed');
             console.log(internetSpeed);
-            const response = await fetch(`http://localhost:8082/api/photos/uploads/${props.imageName}/${internetSpeed}`);
+            const response = await fetch(`https://photoarchive-a1hr.onrender.com/api/photos/uploads/${props.imageName}/${internetSpeed}`);
             const blob = await response.blob();
             setImageUrl(URL.createObjectURL(blob));
         };
@@ -29,14 +30,16 @@ const PostCard = (props) => {
 
     useEffect(() => {
         const fetchImage = async () => {
-            const response = await fetch(`http://localhost:8082/api/photos/uploadsProfileImg/${props.profileImg}`);
+            const response = await fetch(`https://photoarchive-a1hr.onrender.com/api/photos/uploadsProfileImg/${props.profileImg}`);
             const blob = await response.blob();
             setProfileImageUrl(URL.createObjectURL(blob));
         };
         fetchImage();
     }, [props.profileImage]);
 
-
+    function goHome(){
+        props.navigate("/");
+    }
     return(
         <>
             {(props.geolocation && props.placeName) && (
@@ -114,16 +117,22 @@ const PostCard = (props) => {
                                             onClickOutside={() => setShowDelete(false)}
                                             >
                                             <Button label="Confirm delete" onClick={async () => {
+                                                setShowDelete(false);
+                                                setShowLoading(true);
                                                 
                                                 const postId = props.postId;
 
                                                 try {
-                                                    await axios.delete(`http://localhost:8082/api/photos/${postId}`);
+                                                    await axios.delete(`https://photoarchive-a1hr.onrender.com/api/photos/${postId}`);
                                                   } catch (error) {
                                                     console.error('Error deleting post:', error);
+                                                  } finally {
+                                                    setShowLoading(false);
+                                                    goHome();
                                                   }
 
-                                                setShowDelete(false)}
+                                                
+                                            }
                                             
                                             } />
                                             </Layer>
@@ -160,8 +169,25 @@ const PostCard = (props) => {
                     
                 </CardBody>
             </Card>
+            {showLoading && (
+                <Layer
+                >
+                <Box pad="large" align="center">
+                    <Text>Deleting Post! Please Await</Text>
+                    <Spinner />
+                </Box>
+                
+                </Layer>
+            )}
         </>
     );
 };
 
-export default PostCard;
+const WithNavigate = (props) => {
+    let navigate = useNavigate();
+    return(<PostCard {...props} navigate={navigate} />);
+}
+
+
+export default WithNavigate;
+export {WithNavigate, PostCard};

@@ -19,7 +19,7 @@ class Image extends Component {
     componentDidUpdate(prevProps, prevState){
 
         if(prevState.image !== this.state.image) {
-
+            console.log(this.state.image);
             this.getMetadataFromImage(this.state.image);
             
         }
@@ -29,6 +29,7 @@ class Image extends Component {
         }
 
         if(prevState.file !== this.state.file){
+            console.log(this.state.file)
             this.props.onFileChange(this.state.file);
         }
     }
@@ -58,12 +59,13 @@ class Image extends Component {
                 id="fileName"
                 onChange={(event, {files}) => {
                     const fileList = files;
-                    
+                    console.log(fileList[0]);
                     this.setState( {image: fileList[0]} );
                     if(fileList.length === 1){
                         this.setState( {file: URL.createObjectURL(fileList[0]) }, () => {
                             this.setState({iso: 100});
                         });
+                        console.log(this.state.image);
                         
                     }
                 }}

@@ -65,7 +65,9 @@ const Menu = () => {
                     dropContent={
                         <Box pad="medium" gap="small" background="cardInfo" style={{borderRadius: "10px"}}>
                             <Button>
+                                <Link to={`/profile/${Cookies.get('user')}`}>
                                 <Text>Profile</Text>
+                                </Link>
                             </Button>
                             <Button onClick={() => {
                                 Cookies.remove('user');

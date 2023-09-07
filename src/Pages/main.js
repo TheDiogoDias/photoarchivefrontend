@@ -10,15 +10,15 @@ const Main = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const response = await axios.get('http://localhost:8082/api/photos/');
+            const response = await axios.get('https://photoarchive-a1hr.onrender.com/api/photos/');
 
             if(response){
                 const responseData = response.data;
 
                 for(let i = 0; i < responseData.length; i++ ){
                     if(responseData[i].author){
-                        const response = await axios.get(`http://localhost:8082/api/users/getName/${responseData[i].author}`);
-                        const responseProfile = await axios.get(`http://localhost:8082/api/photographers/getProfile/${responseData[i].author}`);
+                        const response = await axios.get(`https://photoarchive-a1hr.onrender.com/api/users/getName/${responseData[i].author}`);
+                        const responseProfile = await axios.get(`https://photoarchive-a1hr.onrender.com/api/photographers/getProfile/${responseData[i].author}`);
                         responseData[i].profileImg = responseProfile.data.ProfileImg;
 
                         responseData[i].authorId = responseData[i].author;

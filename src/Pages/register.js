@@ -50,9 +50,11 @@ class Register extends Component {
                             //insert user
                             try {
                                 const email = this.state.form.email;
-                                const response = await axios.get(`http://localhost:8082/api/users/UserExist?email=${email}`);
-                                console.log(response.data.exists);
-                                if(!response.data.exists){
+                                const emailResponse = await axios.get(`https://photoarchive-a1hr.onrender.com/api/users/emailExist?email=${email}`);
+                                const username = this.state.form.username;
+                                const usernameResponse = await axios.get(`https://photoarchive-a1hr.onrender.com/api/users/usernameExist?username=${username}`);
+
+                                if(!emailResponse.data.exists && usernameResponse.data.exists){
                                     user.createUser();
                                     this.props.navigate("/");
                                 }else{

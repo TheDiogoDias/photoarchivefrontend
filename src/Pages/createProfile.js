@@ -37,7 +37,7 @@ class CreateProfile extends Component{
             const formData = new FormData();
             formData.append('file', image);
            const response = await axios
-            .post('http://localhost:8082/api/photos/saveImage', formData, {
+            .post('https://photoarchive-a1hr.onrender.com/api/photos/saveImage', formData, {
                 headers: {
                     'enctype': 'multipart/form-data',
                 }
@@ -74,16 +74,12 @@ class CreateProfile extends Component{
             console.log(formData);
 
             const profileCreated = await axios
-            .post('http://localhost:8082/api/photographers/createProfile', formData).then((res) => {
+            .post('https://photoarchive-a1hr.onrender.com/api/photographers/createProfile', formData).then((res) => {
                 return true;
             })
             .catch((err) => {
                 console.log(err);
             });
-
-            // if(profileCreated){
-            //     this.props.navigate("/");
-            // }
             
         }
         else

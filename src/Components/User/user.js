@@ -27,7 +27,7 @@ class User{
             password: this.password,
             email: this.email,
         }
-        axios.post('http://localhost:8082/api/users/register', userData)
+        axios.post('https://photoarchive-a1hr.onrender.com/api/users/register', userData)
         .then((res) => {})
         .catch((err) => {console.log(err)});
     }
@@ -37,7 +37,7 @@ class User{
             username: this.username,
             password: this.password
         }
-        const response = await axios.post('http://localhost:8082/api/users/login', userData)
+        const response = await axios.post('https://photoarchive-a1hr.onrender.com/api/users/login', userData)
         .then((res) => {
             if(res.data.isValid){
                 Cookies.set('user', res.data.isValid._id, {expires: 7});
@@ -54,7 +54,7 @@ class User{
 
         const idToCheck = user._id
 
-        const response = await axios.get(`http://localhost:8082/api/photographers/getProfile/${idToCheck}`)
+        const response = await axios.get(`https://photoarchive-a1hr.onrender.com/api/photographers/getProfile/${idToCheck}`)
         
         return response;
     }

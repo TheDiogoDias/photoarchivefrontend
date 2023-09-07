@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Box, Card, CardHeader, CardBody, CardFooter, Notification, Button, Image, Text, TextArea, TextInput, Form, FormField, RangeInput} from 'grommet';
+import {Box, Card, CardHeader, CardBody, CardFooter, Notification, Button, Image, Text, TextArea, TextInput, Form, FormField, RangeInput, Layer, Spinner} from 'grommet';
 import axios from 'axios';
 
 import {useNavigate} from 'react-router-dom';
@@ -21,6 +21,7 @@ class CreatePost extends Component {
             image: null,
             createPost: null,
             visibility: false,
+            showLoading: false,
             form: {
                 placeName: "",
                 geolocation: "",
@@ -43,20 +44,12 @@ class CreatePost extends Component {
         this.handlePlaceSelect = this.handlePlaceSelect.bind(this);
     }
 
-    componentDidUpdate(prevProps, prevState){
-        // if(prevState.form !== this.state.form){
-        //     console.log(this.state.form);
-        // }
-        // if(prevState.place !== this.state.place){
-        //     console.log(this.state.place);
-        // }
-    }
-
     handlePlaceSelect(place) {
         this.setState({place});
     }
 
     handleFileChange(value){
+        console.log(value);
         this.setState({file: value});
     }
 
@@ -100,6 +93,13 @@ class CreatePost extends Component {
         this.setState({file: true});
     }
 
+    isJPEG() {
+        if(this.state.image !== null){
+            const image = this.state.image;
+            return (image.type === 'image/jpeg') ? true : false;
+        }
+    }
+
     onChange = (e) => {
         this.setState({ form :{ ...this.state.form, [e.target.name]: e.target.value } });
     };
@@ -110,7 +110,7 @@ class CreatePost extends Component {
             const formData = new FormData();
             formData.append('image', image);
            const response = await axios
-            .post('http://localhost:8082/api/photos/saveImage', formData, {
+            .post('https://photoarchive-a1hr.onrender.com/api/photos/saveImage', formData, {
                 headers: {
                     'enctype': 'multipart/form-data',
                 }
@@ -128,7 +128,8 @@ class CreatePost extends Component {
     async onSubmit(e, post) {
         e.preventDefault();
         
-        if(post.state.form.title !== "" && post.state.form.description !== "") {
+        if(post.state.form.title !== "" && post.state.form.description !== "" && post.state.form.geolocation !== "" && post.state.form.place !== "") {
+            this.setState({showLoading: true});
 
             const imageName = await this.saveImage(post.state.image);
 
@@ -149,21 +150,27 @@ class CreatePost extends Component {
 
             console.log(formData);
 
-            axios
-            .post('http://localhost:8082/api/photos', formData).then((res) => {
-                post.setState({form: {
-                    title: "",
-                    description: "",
-                    iso: "",
-                    aperture: "",
-                    focalLength: "",
-                    fileName: post.state.file,
-                }});
-                post.props.navigate("/");
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+            try{
+                await axios
+                .post('https://photoarchive-a1hr.onrender.com/api/photos', formData).then((res) => {
+                    post.setState({form: {
+                        title: "",
+                        description: "",
+                        iso: "",
+                        aperture: "",
+                        focalLength: "",
+                        fileName: post.state.file,
+                    }});
+                    post.props.navigate("/");
+                });
+                console.log("Done");
+
+            } catch(error) {
+                console.log(error);
+            } finally {
+                console.log("Done Finally");
+                this.setState({showLoading: false});
+            }
         } else {
             post.setState({visibility: true});
         }
@@ -206,14 +213,16 @@ class CreatePost extends Component {
                         }
                         {
                             (this.state.file != null && this.state.createPost == null) && (
-                                <Image src={this.state.file} fit="contain" width="500px" onLoad={console.log(this.state)} />
+                            
+                                (this.isJPEG()) ? (<Image src={this.state.file} alt="Image" fit="contain" width="500px" />) : (<p>Not valid Jpeg Image</p>)
+                            
                             )
                         }
                         {
                             (this.state.file && this.state.createPost) && (
                             <Box direction="row">
-                                <Box>
-                                    <Image src={this.state.file} width="600px" />
+                                <Box align="center" justify="center">
+                                    <Image src={this.state.file} width="600px" fit="cover"/>
                                 </Box>
                                 <Box pad="large">
                                     <Form
@@ -306,10 +315,20 @@ class CreatePost extends Component {
                 </CardBody>
                 <CardFooter background="cardInfo" pad="small" justify="center">
     
-                    <RenderingPostAction file={this.state.file} createPost={this.state.createPost} enablePost={this.enableCreatePost} disablePost={this.disableCreatePost} />
+                    <RenderingPostAction file={this.state.file} createPost={this.state.createPost} enablePost={this.enableCreatePost} disablePost={this.disableCreatePost} show={this.isJPEG()} />
                     
                 </CardFooter>
             </Card>
+            {this.state.showLoading && (
+                <Layer
+                >
+                <Box pad="large" align="center">
+                    <Text>Uploading Post! Please Await</Text>
+                    <Spinner />
+                </Box>
+                
+                </Layer>
+            )}
             </>
         );
     }
