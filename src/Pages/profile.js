@@ -52,9 +52,10 @@ const Profile = () => {
             const fetchImage = async () => {
 
                 if(data.length != null){
+                    const internetSpeed = Cookies.get('internetSpeed');
                     const responseProfile = await axios.get(`https://photoarchive-a1hr.onrender.com/api/photographers/getProfile/${data[0].authorId}`);
                     setProfile(responseProfile);
-                    const responseImg = await fetch(`https://photoarchive-a1hr.onrender.com/api/photos/uploadsProfileImg/${data[0].profileImg}`);
+                    const responseImg = await fetch(`https://photoarchive-a1hr.onrender.com/api/photos/uploadsProfileImg/${data[0].profileImg}/${internetSpeed}`);
                     const blob = await responseImg.blob();
                     setProfileImg(URL.createObjectURL(blob));
                 }
@@ -71,11 +72,11 @@ const Profile = () => {
 
         return(
             <>
-            <Box direction="row"  background="cardInfo" pad="medium" margin={{vertical: "small"}}style={{borderRadius: "15px"}}> 
+            <Box direction="row"  background="cardInfo"   align="center" style={{borderRadius: "15px"}}> 
                 <Box width="45%" justify="center" pad="medium">
-                    <Image src={profileImg} width="100px" style={{borderRadius: "55px"}}/>
+                    <Image src={profileImg} width="150px" height="150px" style={{borderRadius: "20px"}} fit="cover"/>
                 </Box>
-                <Box>
+                <Box background="cardDescription" fill pad="large" style={{borderRadius: "15px"}}>
                     {(profile != null && data != null) && (
                         <>
                         <Text>Name: {data[0].author}</Text>
@@ -83,7 +84,7 @@ const Profile = () => {
                         <Text>Gear</Text>
                         <Text>Camera: {profile.data.Camera}</Text>
                         <Text>Lens: {profile.data.Lens}</Text>
-                        <Text>Experience: {profile.data.TimeOfExperience}</Text>
+                        <Text>Experience: {profile.data.TimeOfExperience} year</Text>
                         </>
                     )}
                 </Box>

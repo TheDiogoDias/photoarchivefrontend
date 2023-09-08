@@ -28,10 +28,12 @@ class Login extends Component {
         const user = new User(this.state.username, this.state.password);
 
         const result = await user.logIn();
+        console.log(result);
+
 
         if(result){
             const createProfile = await user.checkProfile(result);
-
+            console.log(createProfile);
             if(!createProfile.data) {
                 this.props.navigate("/createProfile");
             } else {

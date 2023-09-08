@@ -30,7 +30,8 @@ const PostCard = (props) => {
 
     useEffect(() => {
         const fetchImage = async () => {
-            const response = await fetch(`https://photoarchive-a1hr.onrender.com/api/photos/uploadsProfileImg/${props.profileImg}`);
+            const internetSpeed = Cookies.get('internetSpeed');
+            const response = await fetch(`https://photoarchive-a1hr.onrender.com/api/photos/uploadsProfileImg/${props.profileImg}/${internetSpeed}`);
             const blob = await response.blob();
             setProfileImageUrl(URL.createObjectURL(blob));
         };
@@ -78,7 +79,7 @@ const PostCard = (props) => {
                                 gap="small" 
                                 pad={{horizontal: "xsmall", vertical: "xsmall"}}
                                 >
-                                <Image src={profileImageUrl} width="40px" style={{borderRadius: "50px"}}/>
+                                <Image src={profileImageUrl} width="40px" height="40px" style={{borderRadius: "100px"}} fit="cover"/>
                             </Box>
                         <Box>
                                 <Link to={`/profile/${props.authorId}`}><Text size="medium" color="headerTitle">{props.author}</Text></Link>
