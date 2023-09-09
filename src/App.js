@@ -56,7 +56,7 @@ const App = () => {
   const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
   const effectiveType = connection.effectiveType; // 'slow-2g', '2g', '3g', '4g', or '5g'
 
-  axios.post('http://localhost:8082/api/photos/internetSpeed', { effectiveType })
+  axios.post('https://photoarchive-a1hr.onrender.com/api/photos/internetSpeed', { effectiveType })
   .then(response => {
       console.log(response.data.message);
       Cookies.set('internetSpeed', response.data.message, {expires: 7});
