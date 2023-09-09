@@ -21,9 +21,11 @@ const PostCard = (props) => {
         const fetchImage = async () => {
             const internetSpeed = Cookies.get('internetSpeed');
             console.log(internetSpeed);
-            const response = await fetch(`https://photoarchive-a1hr.onrender.com/api/photos/uploads/${props.imageName}/${internetSpeed}`);
-            const blob = await response.blob();
-            setImageUrl(URL.createObjectURL(blob));
+            if(internetSpeed){
+                const response = await fetch(`https://photoarchive-a1hr.onrender.com/api/photos/uploads/${props.imageName}/${internetSpeed}`);
+                const blob = await response.blob();
+                setImageUrl(URL.createObjectURL(blob));
+            }
         };
         fetchImage();
     }, [props.imageName]);
@@ -31,9 +33,11 @@ const PostCard = (props) => {
     useEffect(() => {
         const fetchImage = async () => {
             const internetSpeed = Cookies.get('internetSpeed');
-            const response = await fetch(`https://photoarchive-a1hr.onrender.com/api/photos/uploadsProfileImg/${props.profileImg}/${internetSpeed}`);
-            const blob = await response.blob();
-            setProfileImageUrl(URL.createObjectURL(blob));
+            if(internetSpeed){
+                const response = await fetch(`https://photoarchive-a1hr.onrender.com/api/photos/uploadsProfileImg/${props.profileImg}/${internetSpeed}`);
+                const blob = await response.blob();
+                setProfileImageUrl(URL.createObjectURL(blob));
+            }
         };
         fetchImage();
     }, [props.profileImage]);
