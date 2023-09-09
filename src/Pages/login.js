@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Box, Form, FormField, TextInput, Button} from 'grommet';
+import {Box, Form, FormField, TextInput, Button, Layer, Text, Spinner, Notification} from 'grommet';
 
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -12,6 +12,9 @@ class Login extends Component {
     constructor(props){
         super(props);
         this.state = {
+            loginFailed: false,
+            showLoading: false,
+            alertMessage: false,
             username: null,
             password: null
         }
@@ -24,14 +27,13 @@ class Login extends Component {
 
     onSubmit = async (e) => {
         e.preventDefault();
-
+        this.setState({showLoading: true});
         const user = new User(this.state.username, this.state.password);
 
-        const result = await user.logIn();
-        console.log(result);
-
-
-        if(result){
+        try{
+           const result = await user.logIn();
+           console.log(result);
+           if(result){
             const createProfile = await user.checkProfile(result);
             console.log(createProfile);
             if(!createProfile.data) {
@@ -40,12 +42,29 @@ class Login extends Component {
                 this.props.navigate("/");
                 window.location.reload();
             }
+            }else {
+                this.setState({loginFailed: true});
+            }
+        } catch (error) {
+            this.setState({loginFailed: true});
+            console.log(error);
+        } finally {
+            this.setState({showLoading: false});
         }
+        
 
     }
 
     render(){
         return(
+            <>
+            {(this.state.loginFailed) && (
+                <Notification
+                toast
+                title="Alert!" 
+                message="Login Failed! User does not exist!"
+                onClose={()=>{ this.setState({loginFailed: false}); }}/>
+            )}
             <Box background="cardDescription" pad="large" style={{borderRadius: "15px"}}>
                 <Form onSubmit={this.onSubmit}>
                     <FormField label="Username">
@@ -60,6 +79,17 @@ class Login extends Component {
                     </Box>
                 </Form> 
             </Box>
+            {this.state.showLoading && (
+                <Layer
+                >
+                <Box pad="large" align="center">
+                    <Text>Login, please Wait</Text>
+                    <Spinner />
+                </Box>
+                
+                </Layer>
+            )}
+            </>
         );
     };
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {Box, Form, FormField, TextInput, Button, Notification} from 'grommet';
+import {Box, Form, FormField, TextInput, Button, Notification, Text, Layer, Spinner} from 'grommet';
 
 import {useNavigate} from 'react-router-dom';
 
@@ -14,6 +14,7 @@ class Register extends Component {
         super(props);
         this.state = {
             form: {
+                showLoading: false,
                 email: null,
                 name: null,
                 username: null,
@@ -48,6 +49,8 @@ class Register extends Component {
                     if(user.isAllFields()) {
                         if(user.isPasswordCorrect()){
                             //insert user
+                            this.setState({showLoading: true});
+
                             try {
                                 const email = this.state.form.email;
                                 const emailResponse = await axios.get(`https://photoarchive-a1hr.onrender.com/api/users/emailExist?email=${email}`);
@@ -63,6 +66,8 @@ class Register extends Component {
                                 }
                               } catch (error) {
                                 console.error('Error checking email:', error);
+                              } finally {
+                                    this.setState({showLoading: false});
                               }
                             
                         } else {
@@ -76,13 +81,13 @@ class Register extends Component {
 
                 }}>
                     <FormField label="Email">
-                        <TextInput name="email" type="email" onChange={this.onChange}/>
+                        <TextInput name="email" type="email" placeholder="email@domain.com" onChange={this.onChange}/>
                     </FormField>
                     <FormField label="Name">
-                        <TextInput name="name" onChange={this.onChange}/>
+                        <TextInput name="name" placeholder="Name Surname" onChange={this.onChange}/>
                     </FormField>
                     <FormField label="Username">
-                        <TextInput name="username" onChange={this.onChange} />
+                        <TextInput name="username" placeholder="username" onChange={this.onChange} />
                     </FormField>
                     <FormField label="Password">
                         <TextInput name="password" type="password" onChange={this.onChange}/>
@@ -96,6 +101,16 @@ class Register extends Component {
                     </Box>
                 </Form>
             </Box>
+            {this.state.showLoading && (
+                <Layer
+                >
+                <Box pad="large" align="center">
+                    <Text>Creating Account!</Text>
+                    <Spinner />
+                </Box>
+                
+                </Layer>
+            )}
             </>
         );
     };

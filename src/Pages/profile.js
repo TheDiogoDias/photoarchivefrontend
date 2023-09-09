@@ -90,7 +90,7 @@ const Profile = () => {
                 </Box>
             </Box>
             
-            <Grid columns={['auto', 'auto', 'auto']} gap="small">
+            <Grid columns={['auto', 'auto', 'auto']} >
             {(data.length < 1)? (
                 <Box align="center" background="grey" pad="large" style={{borderRadius: "10px"}}>
                     <Text>
@@ -100,16 +100,15 @@ const Profile = () => {
             ) : (
                 data.map((item) => {
 
-                    
-
                     return(
                        
                    
-                            <Box pad="xxsmall">
+                            <Box pad="small" fill >
                             <PostCard
                                     postId={item._id}
                                     profileImg={item.profileImg}
                                     title={item.title}
+                                    description={item.description}
                                     imageName={item.fileName}
                                     authorId={item.authorId}
                                     options={isLogin}
