@@ -48,7 +48,7 @@ const Menu = () => {
             
                     <Box direction="row" gap="xsmall" wrap>
                         <Text color="headerTitle" >
-                            Photo Archive
+                            DagVue
                         </Text>
                     </Box>
 

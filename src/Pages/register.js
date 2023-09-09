@@ -39,7 +39,7 @@ class Register extends Component {
                 message={this.state.alert}
                 onClose={()=>{ this.setState({alert: false}); }}/>
             )}
-            <Box background="cardDescription" pad="large">
+            <Box background="cardDescription" pad="large" style={{borderRadius: "15px"}}>
                 <Form onSubmit={async () => {
                     //Cookies.set('name', 'value', { expires: 7 });
                     const exists = false;
@@ -54,7 +54,8 @@ class Register extends Component {
                                 const username = this.state.form.username;
                                 const usernameResponse = await axios.get(`https://photoarchive-a1hr.onrender.com/api/users/usernameExist?username=${username}`);
 
-                                if(!emailResponse.data.exists && usernameResponse.data.exists){
+
+                                if(!emailResponse.data.exists && !usernameResponse.data.exists){
                                     user.createUser();
                                     this.props.navigate("/");
                                 }else{
@@ -90,7 +91,7 @@ class Register extends Component {
                         <TextInput name="confirmPassword" type="password" onChange={this.onChange} />
                     </FormField>
                     <Box direction="row" gap="small" align="center">
-                        <Button type="button" primary label="Login"/>
+                        <Button type="button" primary label="Login" style={{backgroundColor: "#e9b542"}}/>
                         <Button type="submit" label="Register"/>
                     </Box>
                 </Form>

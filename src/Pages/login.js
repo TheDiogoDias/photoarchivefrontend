@@ -46,7 +46,7 @@ class Login extends Component {
 
     render(){
         return(
-            <Box background="cardDescription" pad="large">
+            <Box background="cardDescription" pad="large" style={{borderRadius: "15px"}}>
                 <Form onSubmit={this.onSubmit}>
                     <FormField label="Username">
                         <TextInput name="username" onChange={this.onChange} />
@@ -55,10 +55,10 @@ class Login extends Component {
                         <TextInput name="password" type='password' onChange={this.onChange} />
                     </FormField>
                     <Box direction="row" gap="small" align="center">
-                        <Button type="submit" primary label="Login"/>
-                        <Link to="/register"><Button type="button" label="Register"/></Link>
+                        <Button type="submit" primary label="Login" style={{backgroundColor: "#e9b542", border: "none"}}/>
+                        <Link to="/register"><Button type="button" label="Register" style={{backgroundColor: "transparent", color: "#e9b542"}}/></Link>
                     </Box>
-                </Form>
+                </Form> 
             </Box>
         );
     };
