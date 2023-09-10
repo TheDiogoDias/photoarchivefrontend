@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {Box, Card, CardHeader, CardBody, Text, Button, Image, Layer, DropButton, Spinner} from "grommet";
+import {Box, Card, CardHeader, CardBody, Text, Button, Image, Layer, DropButton, Spinner, ResponsiveContext} from "grommet";
 
-import { Location } from 'grommet-icons';
+import { Location, FormClose } from 'grommet-icons';
 
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -16,6 +16,7 @@ const PostCard = (props) => {
     const [showDelete, setShowDelete] = useState();
     const [showLoading, setShowLoading] = useState();
     
+    const size = React.useContext(ResponsiveContext);
 
     useEffect(() => {
         const fetchImage = async () => {
@@ -45,6 +46,12 @@ const PostCard = (props) => {
     function goHome(){
         props.navigate("/");
     }
+
+    const handleClose = () => {
+        setShow(false);
+        console.log(show);
+      }
+    
     return(
         <>
             {(props.geolocation && props.placeName) && (
@@ -63,17 +70,18 @@ const PostCard = (props) => {
                     alignContent="center"
                 >
                     <Location width="5px" />
-                    <Button href={props.geolocation} size="small" target="_blank" ><Text size="medium" color="headerTitle" weight="bold">{props.placeName}</Text></Button>
+                    <Button href={props.geolocation} size="small" target="_blank" ><Text size={(size !== "large")&&(size)} color="headerTitle" weight="bold">{props.placeName}</Text></Button>
                 </Box>
             )}
             
             <Card style={(props.author)&&{marginTop: "-40px"}} >
-                <CardHeader   background="cardInfo" pad={{horizontal: "medium"}}>
+                <CardHeader   background="cardInfo" pad={{horizontal: "medium"}} >
                     <Box 
                         direction="row"
                         gap="small"
                         maxWidth="small"
                         pad={{vertical: "small", horizontal: "small"}}
+                        align="center"
                     >
                         <Button justify="center">
                             <Box direction="row" align="center">
@@ -86,16 +94,16 @@ const PostCard = (props) => {
                                 <Image src={profileImageUrl} width="40px" height="40px" style={{borderRadius: "100px"}} fit="cover"/>
                             </Box>
                         <Box>
-                                <Link to={`/profile/${props.authorId}`}><Text size="medium" color="headerTitle" weight="bold">{props.author}</Text></Link>
+                                <Link to={`/profile/${props.authorId}`} style={{textDecoration: "none"}}><Text size={(size !== "large")&&(size)} color="headerTitle" weight="bold">{(size !== "small")&&(props.author)}</Text></Link>
                         </Box>
                         </Box>
                         </Button>
                     </Box> 
-                    <Box background="cardDescription" width="400px" height="100%" direction="row" gap="small" fill="vertical" pad={{vertical: "medium", horizontal
-                : "medium"}} style={{padding: "30px", boxShadow: "rgb(12 11 11 / 43%) 0px 0px 10px"}} align="center">
-                        <Text size="medium" color="headerTitle" weight="bold">{props.title}</Text>
-                        <Text color="headerTitle">|</Text>
-                        <Text size="small" color="headerTitle" style={{opacity: "70%"}}>{props.description.slice(0, 5)}...</Text> 
+                    <Box background="cardDescription" width="400px" height="100%" direction="row" gap="small" fill="vertical" pad={{vertical: size, horizontal
+                : size}} style={{padding: "30px", boxShadow: "rgb(12 11 11 / 43%) 0px 0px 10px"}} align="center">
+                        <Text size="small" color="headerTitle" weight="bold">{(props.options === true) ? (props.title.slice(0, 5) + "...") : props.title}</Text>
+                        <Text color="headerTitle">{(size !== "small" && props.description)&&("|")}</Text>
+                        {(size !== "small")&&(<Text size={(size !== "large")&&(size)} color="headerTitle" style={{opacity: "70%"}}>{(props.description)&&(props.description.slice(0, 5) + "...")}</Text>)} 
                     </Box>
                     
                         {(props.focalLength && props.aperture && props.iso) && (
@@ -104,13 +112,13 @@ const PostCard = (props) => {
                             align="center"
                             gap="small"
                             >
-                            <Text size="medium" color="headerTitle">{props.focalLength} mm</Text>
-                            <Text size="medium" color="headerTitle">F/{props.aperture}</Text>
-                            <Text size="medium" color="headerTitle">{props.iso} ISO</Text>
+                            <Text size={(size !== "large")&&(size)} color="headerTitle">{props.focalLength}{(size !== "small")&&("mm")} </Text>
+                            <Text size={(size !== "large")&&(size)} color="headerTitle">{(size !== "small")&&("F/")}{props.aperture}</Text>
+                            <Text size={(size !== "large")&&(size)} color="headerTitle">{props.iso} {(size !== "small")&&("ISO")}</Text>
                             </Box>
                         )}
 
-                        {(props.options == true) && (
+                        {(props.options === true) && (
                              <DropButton
                     
                              dropContent={
@@ -166,9 +174,16 @@ const PostCard = (props) => {
                                     background="cardDescription"
                                     style={{borderRadius: "15px"}}
                                     >
-                                    <Box pad="xsmall" gap="small" align="center">
-                                        <Image src={imageUrl} width="700px" style={{borderRadius: "15px"}}/>
-                                        <Text textAlign="center" color="headerTitle">{props.description}</Text>   
+                                    <Box pad="xsmall" gap="small" align="center" margin="small">
+                                        <Box>
+                                            <Button onClick={handleClose}>
+                                                <FormClose />  
+                                            </Button>
+                                        </Box>
+                                        <Box>
+                                            <Image src={imageUrl} width="400px" style={{borderRadius: "15px"}}/>
+                                            <Text textAlign="center" color="headerTitle">{props.shortDescription}</Text>
+                                        </Box>
                                     </Box>
                                     </Layer>
                                 )}

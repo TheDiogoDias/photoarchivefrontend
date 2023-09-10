@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {Box, Form, FormField, TextInput, Button, Notification, Text, Layer, Spinner} from 'grommet';
 
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -96,8 +96,10 @@ class Register extends Component {
                         <TextInput name="confirmPassword" type="password" onChange={this.onChange} />
                     </FormField>
                     <Box direction="row" gap="small" align="center">
-                        <Button type="button" primary label="Login" style={{backgroundColor: "#e9b542"}}/>
                         <Button type="submit" label="Register"/>
+                        <Link to="/login">
+                        <Button type="button" primary label="Login" style={{backgroundColor: "#e9b542"}}/>
+                        </Link>
                     </Box>
                 </Form>
             </Box>

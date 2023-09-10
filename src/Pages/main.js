@@ -55,6 +55,7 @@ const Main = () => {
                         author={item.author}
                         title={item.title}
                         description={item.description}
+                        shortDescription={item.description}
                         focalLength={item.focalLength}
                         aperture={item.aperture}
                         iso={item.iso}

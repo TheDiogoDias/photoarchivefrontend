@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {Box, Card, CardHeader, CardBody, CardFooter, Notification, Button, Image, Text, TextArea, TextInput, Form, FormField, RangeInput, Layer, Spinner} from 'grommet';
+import React, {Component, useContext} from "react";
+import {Box, Card, CardHeader, CardBody, CardFooter, Notification, Button, Image, Text, TextArea, TextInput, Form, FormField, RangeInput, Layer, Spinner, ResponsiveContext} from 'grommet';
 import axios from 'axios';
 
 import {useNavigate} from 'react-router-dom';
@@ -42,7 +42,10 @@ class CreatePost extends Component {
         this.handleFormApertureValue = this.handleFormApertureValue.bind(this);
         this.handleFormFocalLengthValue = this.handleFormFocalLengthValue.bind(this);
         this.handlePlaceSelect = this.handlePlaceSelect.bind(this);
+
     }
+
+    static contextSize = ResponsiveContext;
 
     handlePlaceSelect(place) {
         this.setState({place});
@@ -181,6 +184,10 @@ class CreatePost extends Component {
     }
 
     render() {
+
+        const size = this.context;
+        
+        console.log(size );
         return(
             <>
             {(this.state.visibility) && (
@@ -302,10 +309,11 @@ class CreatePost extends Component {
                                                 disabled={() => {
                                                     if(this.state.form.focalLength !== "50") return true;
                                                 }}
+                                                color="orange"
                                             />
                                             <Text>{this.state.form.focalLength}</Text>
                                         </FormField>
-                                        <Button type="submit" primary label="Submit" />
+                                        <Button type="submit" primary label="Submit" style={{backgroundColor: "orange"}}/>
                                     </Form>
                                 </Box>
                             </Box>
@@ -337,7 +345,7 @@ class CreatePost extends Component {
 
 const WithNavigate = (props) => {
     let navigate = useNavigate();
-    return(<CreatePost {...props} navigate={navigate} />);
+    return(<CreatePost {...props} navigate={navigate} context={useContext} />);
 }
 
 

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 
-import {Box, Text, Grid, Image} from "grommet";
+import {Box, Text, Grid, Image, ResponsiveContext} from "grommet";
 
 import { useParams } from 'react-router-dom';
 
@@ -18,6 +18,8 @@ const Profile = () => {
     const [isLogin, setIsLogin] = useState();
 
     const {authorId} = useParams();
+
+    const size = React.useContext(ResponsiveContext);
 
     useEffect(() => {
         async function fetchData() {
@@ -69,6 +71,13 @@ const Profile = () => {
             if(Cookies.get('user')) setIsLogin(true);
 
         }, [Cookies.get('user')]);
+        
+        const getSizeArray = (size) => {
+            return size === 'small' ? [] :
+                   size === 'medium' ? ['auto'] :
+                   size === 'large' ? ['auto', 'auto', 'auto'] :
+                   [];
+          };
 
         return(
             <>
@@ -90,7 +99,7 @@ const Profile = () => {
                 </Box>
             </Box>
             
-            <Grid columns={['auto', 'auto', 'auto']} >
+            <Grid columns={getSizeArray(size)} >
             {(data.length < 1)? (
                 <Box align="center" background="grey" pad="large" style={{borderRadius: "10px"}}>
                     <Text>
@@ -108,7 +117,7 @@ const Profile = () => {
                                     postId={item._id}
                                     profileImg={item.profileImg}
                                     title={item.title}
-                                    description={item.description}
+                                    shortDescription={item.description}
                                     imageName={item.fileName}
                                     authorId={item.authorId}
                                     options={isLogin}

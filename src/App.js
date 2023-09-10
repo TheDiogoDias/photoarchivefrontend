@@ -34,11 +34,24 @@ const theme = deepMerge(grommet,{
       doc: 'grey',
       cardInfo: '#212121',
       cardDescription: '#272727',
+      a: "orange"
     },
     font: {
       family: "Segoe UI",
       size: "18px",
       height: "20px",
+    },
+    focus:{
+      border: {
+        color: "orange",
+      }
+    },
+    anchor: {
+      textDecoration: 'none', // Remove underline for all links
+      color: 'black', // Change the color of the links
+      visited: {
+        color: 'orange', // Change the color of visited links
+      },
     },
   },
   page: {
@@ -49,6 +62,28 @@ const theme = deepMerge(grommet,{
       }
     },
   },
+  fileInput: {
+    button: {
+      color: 'orange'
+    },
+    border: {
+      color: 'orange', // Change the border color to green
+    },
+  },
+  button: {
+    border: {
+      color: "orange"
+    },
+    background: {
+      color: "orange"
+    },
+  },
+
+  rangeInput: {
+    thumb: {
+      color: "orange"
+    }
+  }
 });
 
 const App = () => {

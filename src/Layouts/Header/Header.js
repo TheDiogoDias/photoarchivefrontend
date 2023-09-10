@@ -82,15 +82,15 @@ const Menu = () => {
                     dropContent={
                         <Box pad="medium" gap="small" background="cardInfo" style={{borderRadius: "10px"}}>
                             <Button>
-                                <Link to={`/profile/${Cookies.get('user')}`}>
-                                <Text>Profile</Text>
+                                <Link to={`/profile/${Cookies.get('user')}`} style={{textDecoration: "none"}}>
+                                <Text color="Orange">Profile</Text>
                                 </Link>
                             </Button>
                             <Button onClick={() => {
                                 Cookies.remove('user');
                             }}>
-                                <Link to="/login" onClick={() => {window.location.reload()}}>
-                                    <Text>Logout</Text>
+                                <Link to="/login" style={{textDecoration: "none"}} onClick={() => {window.location.reload()}}>
+                                    <Text color="headerTitle">Logout</Text>
                                 </Link>
                             </Button>
                         </Box>
