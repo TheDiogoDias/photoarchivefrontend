@@ -175,10 +175,9 @@ const PostCard = (props) => {
                                     style={{borderRadius: "15px"}}
                                     >
                                     <Box pad="xsmall" gap="small" align="center" margin="small">
+                                    
                                         <Box>
-                                            <Button onClick={handleClose}>
-                                                <FormClose />  
-                                            </Button>
+                                            
                                         </Box>
                                         <Box>
                                             <Image src={imageUrl} width="400px" style={{borderRadius: "15px"}}/>
