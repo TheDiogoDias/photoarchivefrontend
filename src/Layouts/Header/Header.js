@@ -6,7 +6,6 @@ import gridViewIcon from '../../assets/icons/GridView.png';
 import verticalViewIcon from '../../assets/icons/VerticalView.png';
 
 import addPostIcon from '../../assets/icons/addPost.png';
-import profileIcon from '../../assets/icons/ProfilePic.png';
 
 import axios from 'axios';
 
@@ -44,13 +43,9 @@ const Menu = () => {
                     pad={{vertical: 'small'}}
                     responsive={false}
                 >
-                    <Image src={appIcon} />
+                    <Image src={appIcon} width="100px" />
             
-                    <Box direction="row" gap="xsmall" wrap>
-                        <Text color="headerTitle" >
-                            DagVue
-                        </Text>
-                    </Box>
+                    
 
                     
                 </Box>

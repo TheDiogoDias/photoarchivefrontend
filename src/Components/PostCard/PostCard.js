@@ -101,7 +101,7 @@ const PostCard = (props) => {
                     </Box> 
                     <Box background="cardDescription" width="400px" height="100%" direction="row" gap="small" fill="vertical" pad={{vertical: size, horizontal
                 : size}} style={{padding: "30px", boxShadow: "rgb(12 11 11 / 43%) 0px 0px 10px"}} align="center">
-                        <Text size="small" color="headerTitle" weight="bold">{(props.options === true) ? (props.title.slice(0, 5) + "...") : props.title}</Text>
+                        <Text size="small" color="headerTitle" weight="bold">{(props.profileView === true) ? (props.title.slice(0, 5) + "...") : props.title}</Text>
                         <Text color="headerTitle">{(size !== "small" && props.description)&&("|")}</Text>
                         {(size !== "small")&&(<Text size={(size !== "large")&&(size)} color="headerTitle" style={{opacity: "70%"}}>{(props.description)&&(props.description.slice(0, 5) + "...")}</Text>)} 
                     </Box>

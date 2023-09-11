@@ -71,7 +71,7 @@ const Profile = () => {
 
         useEffect(() => {
 
-            if(Cookies.get('user')) setIsLogin(true);
+            if(Cookies.get('user') === authorId) setIsLogin(true);
 
         }, [Cookies.get('user')]);
         
@@ -124,6 +124,7 @@ const Profile = () => {
                                     imageName={item.fileName}
                                     authorId={item.authorId}
                                     options={isLogin}
+                                    profileView={true}
                                 />
                             </Box>
                     
